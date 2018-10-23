@@ -16,45 +16,20 @@ class Tree:
     self.__totUp = totUp
     self.__totDown = totDown
 
-
   def preorder(self):
     ans = "{}".format(self.__comment_id)
     for comment in self.__comments:
       ans += " {}".format(comment.preorder())
     return ans
 
-  
-  def dfs(self):
-    stack = [self]
-    path=[]
-    x=0
-    while stack: 
-      vertex = stack.pop()
-      path.append(vertex)
-      x=0
-      for i in range(len(vertex.__comments)):
-        #path[x].__totUp += vertex.__comments[i].__ups
-        stack.append(vertex.__comments[i])
-        x=i
-      if len(stack) > 0:
-        flag = False
-        while vertex.getLvl() + 2 != stack[x].getLvl():
-          flag=True
-          past = vertex
-          vertex = vertex.getParent()
-          vertex.setSubUp(past.getSubUp())
-      else:
-        while vertex.getLvl() != 0:
-          flag=True
-          past = vertex
-          vertex = vertex.getParent()
-          print("parent",vertex, past.getUps())
-          vertex.setSubUp(past.getSubUp())
+  def preorder_votes(self):
+    print(self.__totUp, self.__totDown)
+    for comment in self.__comments:
+      comment.preorder_votes()
 
-      x+=1
-    #print(path)
-    for i in path:
-      print(i.__totUp)
+  def votes(self):
+    dfs(self)
+    self.preorder_votes()
   
   def getParent(self):
     return self.__parent
@@ -93,11 +68,12 @@ class Tree:
   def getUps(self):
     return self.__ups
 
+  def getComments(self):
+    return self.__comments
 
    #agregue upVotes
   def setUps(self, ups):
     self.__ups = ups
-    self.__totUp = ups
   
   def getDowns(self):
     return self.__downs
@@ -105,7 +81,6 @@ class Tree:
     #agregue upVotes
   def setDowns(self, downs):
     self.__downs = downs
-    self.__totDown = downs
     
   def setSubUp(self, votes):
     self.__totUp += votes
@@ -124,6 +99,16 @@ class Tree:
 
   def setDate(self, date):
     self.__date = date
+
+def dfs(source):
+  ansU, ansD = source.getUps(), source.getDowns()
+  for u in source.getComments():
+    ups, downs = dfs(u)
+    ansU += ups
+    ansD += downs
+  source.setSubUp(ansU)
+  source.setSubDown(ansD)
+  return ansU, ansD
 
 def build():
   line = stdin.readline().strip()
@@ -175,9 +160,7 @@ def build():
 
     line = stdin.readline().strip()
   
-  #foro.printF()
-  foro.dfs()
-  #print(foro.preorder())
-  #print(foro.comments)
+  print(foro.preorder())
+  foro.votes()
 
 build()
