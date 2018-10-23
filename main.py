@@ -3,7 +3,7 @@ from sys import stdin, setrecursionlimit
 setrecursionlimit(1000000)
 
 class Tree:
-  def __init__(self, comment_id="", body="", author="", ups=0, downs=0, date="", parent=None, lvl=0):
+  def __init__(self, comment_id="", body="", author="", ups=0, downs=0, date="", parent=None, lvl=0, totUp=0, totDown=0):
     self.__comment_id = comment_id
     self.__body = body
     self.__author = author
@@ -13,6 +13,9 @@ class Tree:
     self.__comments = []
     self.__parent = parent
     self.__lvl = lvl
+    self.__totUp = totUp
+    self.__totDown = totDown
+
 
   def preorder(self):
     ans = "{}".format(self.__comment_id)
@@ -20,6 +23,39 @@ class Tree:
       ans += " {}".format(comment.preorder())
     return ans
 
+  
+  def dfs(self):
+    stack = [self]
+    path=[]
+    x=0
+    while stack: 
+      vertex = stack.pop()
+      path.append(vertex)
+      x=0
+      for i in range(len(vertex.__comments)):
+        #path[x].__totUp += vertex.__comments[i].__ups
+        stack.append(vertex.__comments[i])
+        x=i
+      if len(stack) > 0:
+        flag = False
+        while vertex.getLvl() + 2 != stack[x].getLvl():
+          flag=True
+          past = vertex
+          vertex = vertex.getParent()
+          vertex.setSubUp(past.getSubUp())
+      else:
+        while vertex.getLvl() != 0:
+          flag=True
+          past = vertex
+          vertex = vertex.getParent()
+          print("parent",vertex, past.getUps())
+          vertex.setSubUp(past.getSubUp())
+
+      x+=1
+    #print(path)
+    for i in path:
+      print(i.__totUp)
+  
   def getParent(self):
     return self.__parent
 
@@ -57,14 +93,31 @@ class Tree:
   def getUps(self):
     return self.__ups
 
+
+   #agregue upVotes
   def setUps(self, ups):
     self.__ups = ups
-
+    self.__totUp = ups
+  
   def getDowns(self):
     return self.__downs
 
+    #agregue upVotes
   def setDowns(self, downs):
     self.__downs = downs
+    self.__totDown = downs
+    
+  def setSubUp(self, votes):
+    self.__totUp += votes
+
+  def getSubUp(self):
+    return self.__totUp
+
+  def setSubDown(self, votes):
+    self.__totDown += votes
+
+  def getSubDown(self):
+    return self.__totDown
 
   def getDate(self):
     return self.__date
@@ -110,6 +163,7 @@ def build():
     
     if temp.getLvl() > index.getLvl():
       index.addComment(temp)
+     
     else:
       if temp.getLvl() != 0:
         while index.getLvl() + 2 != temp.getLvl():
@@ -120,6 +174,10 @@ def build():
     index = temp
 
     line = stdin.readline().strip()
-  print(foro.preorder())
+  
+  #foro.printF()
+  foro.dfs()
+  #print(foro.preorder())
+  #print(foro.comments)
 
 build()
