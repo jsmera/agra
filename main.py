@@ -1,4 +1,5 @@
 from sys import stdin, setrecursionlimit
+import operator
 
 setrecursionlimit(1000000)
 
@@ -30,7 +31,14 @@ class Tree:
   def votes(self):
     dfs(self)
     self.preorder_votes()
-  
+
+  def getUserByComments(self):
+    users = {}
+    getUserByComments(self, users)
+    temp = sorted(users.items(), key=lambda item: (-item[1], item[0])) 
+    for user, i in temp:
+      print(user, i)
+
   def getParent(self):
     return self.__parent
 
@@ -100,6 +108,15 @@ class Tree:
   def setDate(self, date):
     self.__date = date
 
+def getUserByComments(source, users):
+  if source.getAuthor() in users:
+    users[source.getAuthor()] += 1
+  else:
+    users[source.getAuthor()] = 1
+
+  for u in source.getComments():
+    getUserByComments(u, users)
+
 def dfs(source):
   ansU, ansD = source.getUps(), source.getDowns()
   for u in source.getComments():
@@ -122,8 +139,10 @@ def build():
       I += 1
     temp.setLvl(I)
     d = I+1
-    while line[d] != '[':
-      d += 1
+    ite = I+1
+    while ite < len(line):
+      if line[ite] == '[': d = ite
+      ite += 1
     temp.setBody(line[I+1:d])
     j = d+1
     while line[j] != '|':
@@ -162,5 +181,6 @@ def build():
   
   print(foro.preorder())
   foro.votes()
+  foro.getUserByComments()
 
 build()
