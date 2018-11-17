@@ -60,7 +60,8 @@ def thiessen(tree):
       heappush(heap, (participacion[i][0], 0))
     distance[participacion[i][0]] = INF
 
-  source = last = ""
+  source = ""
+  last = ""
   while len(heap):
     u, wi = heappop(heap)
     if wi == 0:
@@ -71,10 +72,16 @@ def thiessen(tree):
       if wi + promedio < distance[v]:
         distance[v] = wi + promedio
         heappush(heap, (v, wi + promedio))
-        if u not in centros:
+        if v not in centros:
           if last != "":
-            if u in centros[last]: centros[last].remove(u)
-          centros[source].add(u)
+            if v in centros[last]: centros[last].remove(v)
+          centros[source].add(v)
+      elif wi + promedio == distance[v]:
+        if v not in centros:
+          if last != "":
+            if v in centros[last] and last > source:
+              centros[last].remove(v)
+              centros[source].add(v)
   
   for centro in centros:
     print(centro, end=" ")
