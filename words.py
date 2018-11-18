@@ -29,7 +29,7 @@ def isWord(string):
     return words,original
 
 def words(comment):
-   word=s.lower()
+    word=s.lower()
     words,original=isWord(word)
     cant = len(original)
     i=0
@@ -42,20 +42,21 @@ def words(comment):
             if check.get(original[i]) == None:
                 check[original[i]] = True
         
+
+        if i-start > save[1] - save[0]:
+            i=start+1
+            start=i
+            check = {}
+
         if len(check) == len(words):        
             actual = (start,i)
+            x = actual[0]
+            y = actual[1]
             if save[1] == INF:
-                x = actual[0]
-                y = actual[1]+1
                 save = (x,y)
 
-            if save[1]-save[0] >= actual[1]-actual[0]:
-                x = actual[0]
-                y = actual[1]+1
-                if save[1]-save[0] == actual[1]-actual[0] and save[0] > actual[0]:
-                    save = (x,y)
-                else:
-                    save = (x,y)
+            if save[1]-save[0] > actual[1]-actual[0]:
+                save = (x,y)
 
             flag = True
 
@@ -66,6 +67,8 @@ def words(comment):
             flag = False
         else:
             i+=1
+
+    save = (save[0],save[1]+1)
     return save
             
     
