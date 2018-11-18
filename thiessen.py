@@ -54,6 +54,7 @@ def thiessen(tree):
   participacion = tree.getUserByCommentsList()
   centros = {}
   distance = {}
+  usuario = {}
   # distance1 = {}
   # distance2 = {}
   # print(len(G))
@@ -62,6 +63,7 @@ def thiessen(tree):
     if i < k:
       centros[participacion[i][0]] = set()
     distance[participacion[i][0]] = INF
+    usuario[participacion[i][0]] = ""
   #   distance1[participacion[i][0]] = INF
   #   distance2[participacion[i][0]] = INF
 
@@ -85,7 +87,6 @@ def thiessen(tree):
   #       heappush(heap2, (v, wi + promedio))
   # print(distance1["bargainhunterrr17"], distance2["bargainhunterrr17"])
   
-  last = ""
   for source in centros:
     heap = [(source, 0)]
     while len(heap):
@@ -93,13 +94,14 @@ def thiessen(tree):
       for v in G[u]:
         acumulado, n = G[u][v]
         promedio = acumulado//n
+        last = usuario[v]
+        for w in centros:
+          if v in centros[w]: last = w
         if wi + promedio < distance[v]:
           distance[v] = wi + promedio
           heappush(heap, (v, wi + promedio))
           if v not in centros:
-            if last != "":
-              if v in centros[last]:
-                centros[last].remove(v)
+            if last != "": centros[last].remove(v)
             centros[source].add(v)
         elif wi + promedio == distance[v]:
           heappush(heap, (v, wi + promedio))
@@ -108,7 +110,7 @@ def thiessen(tree):
               if v in centros[last] and last > source:
                 centros[last].remove(v)
                 centros[source].add(v)
-    last = source
+    # last = source
   # for i in G:
   #   print(i)
   #   print(G[i])
@@ -119,4 +121,4 @@ def thiessen(tree):
     stop = len(centros[centro])
     for vertice in centros[centro]:
       print(distance[vertice], end=" ")
-    print("\n")
+    print()

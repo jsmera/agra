@@ -28,8 +28,8 @@ def isWord(string):
 
     return words,original
 
-def words(comment):
-   word=s.lower()
+def words(s):
+    word=s.lower()
     words,original=isWord(word)
     cant = len(original)
     i=0
