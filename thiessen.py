@@ -2,7 +2,7 @@ from heapq import heappush, heappop
 INF = float('inf')
 
 def get_seconds(date_1, date_2):
-  delta = date_2 - date_1
+  delta = abs(date_2 - date_1)
   return 86400*delta.days + delta.seconds
 
 def build_graph(tree, G):
@@ -10,7 +10,7 @@ def build_graph(tree, G):
     G[tree.getAuthor()] = {}
   ocurrencias = []
   for subcomment in tree.getComments():
-    assert tree.getDate() <= subcomment.getDate()
+    # assert tree.getDate() <= subcomment.getDate()
     delta = get_seconds(tree.getDate(), subcomment.getDate())
     aux = build_graph(subcomment, G)
     aux.append([subcomment.getAuthor(), 0])
@@ -56,7 +56,7 @@ def thiessen(tree):
   distance = {}
   # distance1 = {}
   # distance2 = {}
-  # print(G["_Person_"])
+  # print(len(G))
   k = k if k > 2 else 2
   for i in range(len(participacion)):
     if i < k:
@@ -109,7 +109,9 @@ def thiessen(tree):
                 centros[last].remove(v)
                 centros[source].add(v)
     last = source
-  
+  # for i in G:
+  #   print(i)
+  #   print(G[i])
   # print(distance1["_Person_"], distance2["_Person_"])
   for centro in centros:
     print(centro, end=" ")

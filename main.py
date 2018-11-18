@@ -192,10 +192,10 @@ def build():
 
     line = stdin.readline().strip()
 
-  print(foro.preorder())
-  foro.votes()
-  foro.getUserByComments()
-  print()
+  # print(foro.preorder())
+  # foro.votes()
+  # foro.getUserByComments()
+  # print()
   thiessen(foro)
   foro.preorder_intervals()
 
