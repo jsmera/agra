@@ -183,12 +183,9 @@ def build():
 
     line = stdin.readline().strip()
 
-  thiessen(foro)
-  # G = {}
-  # buildGraph(foro, G)
-  # print(G)
   # print(foro.preorder())
   # foro.votes()
   # foro.getUserByComments()
+  thiessen(foro)
 
 build()

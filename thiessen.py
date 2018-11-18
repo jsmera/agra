@@ -52,36 +52,35 @@ def thiessen(tree):
   participacion = tree.getUserByCommentsList()
   centros = {}
   distance = {}
-  heap = []
   k = k if k > 2 else 2
   for i in range(len(participacion)):
     if i < k:
       centros[participacion[i][0]] = set()
-      heappush(heap, (participacion[i][0], 0))
     distance[participacion[i][0]] = INF
 
-  source = ""
   last = ""
-  while len(heap):
-    u, wi = heappop(heap)
-    if wi == 0:
-      last, source = source, u
-    for v in G[u]:
-      acumulado, n = G[u][v]
-      promedio = acumulado//n
-      if wi + promedio < distance[v]:
-        distance[v] = wi + promedio
-        heappush(heap, (v, wi + promedio))
-        if v not in centros:
-          if last != "":
-            if v in centros[last]: centros[last].remove(v)
-          centros[source].add(v)
-      elif wi + promedio == distance[v]:
-        if v not in centros:
-          if last != "":
-            if v in centros[last] and last > source:
-              centros[last].remove(v)
-              centros[source].add(v)
+  for source in centros:
+    heap = [(source, 0)]
+    while len(heap):
+      u, wi = heappop(heap)
+      for v in G[u]:
+        acumulado, n = G[u][v]
+        promedio = acumulado//n
+        if wi + promedio < distance[v]:
+          distance[v] = wi + promedio
+          heappush(heap, (v, wi + promedio))
+          if v not in centros:
+            if last != "":
+              if v in centros[last]:
+                centros[last].remove(v)
+            centros[source].add(v)
+        elif wi + promedio == distance[v]:
+          if v not in centros:
+            if last != "":
+              if v in centros[last] and last > source:
+                centros[last].remove(v)
+                centros[source].add(v)
+    last = source
   
   for centro in centros:
     print(centro, end=" ")
