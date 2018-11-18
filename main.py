@@ -31,10 +31,10 @@ class Tree:
     for comment in self.__comments:
       comment.preorder_votes()
 
- 
   def preorder_intervals(self):
+    print(self.getId(), *words(self.getBody()))
     for comment in self.__comments:
-      print(words(comment.getBody()))
+      comment.preorder_intervals()
 
   def votes(self):
     dfs(self)
@@ -190,20 +190,10 @@ def build():
 
     line = stdin.readline().strip()
 
-<<<<<<< HEAD
-=======
-
-  
-  #thiessen(foro)
-  foro.preorder_intervals()
-  
-  # G = {}
-  # buildGraph(foro, G)
-  # print(G)
->>>>>>> 1ebdcc3dcfe1679274c0d78c6e80e6299ab19108
   # print(foro.preorder())
   # foro.votes()
   # foro.getUserByComments()
   thiessen(foro)
+  foro.preorder_intervals()
 
 build()
