@@ -1,6 +1,7 @@
 from sys import stdin, setrecursionlimit
 from datetime import datetime
 from thiessen import thiessen
+from words import words
 import operator
 
 setrecursionlimit(1000000)
@@ -29,6 +30,11 @@ class Tree:
     print(self.__totUp, self.__totDown)
     for comment in self.__comments:
       comment.preorder_votes()
+
+ 
+  def preorder_intervals(self):
+    for comment in self.__comments:
+      print(words(comment.getBody()))
 
   def votes(self):
     dfs(self)
@@ -133,6 +139,7 @@ def dfs(source):
   source.setSubDown(ansD)
   return ansU, ansD
 
+
 def build():
   line = stdin.readline().strip()
   foro = Tree()
@@ -183,6 +190,17 @@ def build():
 
     line = stdin.readline().strip()
 
+<<<<<<< HEAD
+=======
+
+  
+  #thiessen(foro)
+  foro.preorder_intervals()
+  
+  # G = {}
+  # buildGraph(foro, G)
+  # print(G)
+>>>>>>> 1ebdcc3dcfe1679274c0d78c6e80e6299ab19108
   # print(foro.preorder())
   # foro.votes()
   # foro.getUserByComments()
