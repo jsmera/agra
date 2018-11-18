@@ -2,20 +2,32 @@ from sys import stdin
 
 INF = float('inf')
 
+
 def isWord(string):
     words = set()
     word=""
     original=[]
+    flag=False
     for i in string:
         letter = ord(i)
         if  97 <= letter <= 122:
             word+=i
-        elif word != "": 
+        
+        elif word != "":
+            flag = True
+        
+        if flag:
             words.add(word)
             original.append(word)
             word=""
-    
+            flag=False
+
+    if word != "":
+        original.append(word)
+        words.add(word)
+
     return words,original
+
 
 
 def words(comment):
