@@ -41,9 +41,13 @@ def words(comment):
             #update
             actual = (start,i)
             if save[1] == INF:
-                save = actual
+                x = actual[0]
+                y = actual[1]+1
+                save = (x,y)
             if save[1]-save[0] > actual[1]-actual[0] and save[0]>=actual[0]:
-                save = actual
+                x = actual[0]
+                y = actual[1]+1
+                save = (x,y)
             
             i=start+1
             start=i
