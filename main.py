@@ -2,6 +2,7 @@ from sys import stdin, setrecursionlimit
 from datetime import datetime
 from thiessen import thiessen
 from words import words
+# import time
 import operator
 
 setrecursionlimit(1000000)
@@ -182,7 +183,8 @@ def build():
     else:
       if temp.getLvl() != 0:
         while index.getLvl() + 2 != temp.getLvl():
-          index = index.getParent()
+          if index.getParent() is None: break
+          else: index = index.getParent()
         index.addComment(temp)
       else:
         foro = temp
@@ -190,10 +192,12 @@ def build():
 
     line = stdin.readline().strip()
 
-  # print(foro.preorder())
-  # foro.votes()
-  # foro.getUserByComments()
+  print(foro.preorder())
+  foro.votes()
+  foro.getUserByComments()
+  print()
   thiessen(foro)
   foro.preorder_intervals()
+
 
 build()

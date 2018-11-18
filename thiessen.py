@@ -1,15 +1,17 @@
 from heapq import heappush, heappop
 INF = float('inf')
 
-
+def get_seconds(date_1, date_2):
+  delta = date_2 - date_1
+  return 86400*delta.days + delta.seconds
 
 def build_graph(tree, G):
   if tree.getAuthor() not in G:
     G[tree.getAuthor()] = {}
   ocurrencias = []
   for subcomment in tree.getComments():
-    delta = subcomment.getDate() - tree.getDate()
-    delta = delta.seconds
+    assert tree.getDate() <= subcomment.getDate()
+    delta = get_seconds(tree.getDate(), subcomment.getDate())
     aux = build_graph(subcomment, G)
     aux.append([subcomment.getAuthor(), 0])
 
@@ -52,12 +54,37 @@ def thiessen(tree):
   participacion = tree.getUserByCommentsList()
   centros = {}
   distance = {}
+  # distance1 = {}
+  # distance2 = {}
+  # print(G["_Person_"])
   k = k if k > 2 else 2
   for i in range(len(participacion)):
     if i < k:
       centros[participacion[i][0]] = set()
     distance[participacion[i][0]] = INF
+  #   distance1[participacion[i][0]] = INF
+  #   distance2[participacion[i][0]] = INF
 
+  # heap1 = [("derawin07", 0)]
+  # heap2 = [("None", 0)]
+  # while len(heap1):
+  #   u, wi = heappop(heap1)
+  #   for v in G[u]:
+  #     acumulado, n = G[u][v]
+  #     promedio = acumulado//n
+  #     if wi + promedio < distance1[v]:
+  #       distance1[v] = wi + promedio
+  #       heappush(heap1, (v, wi + promedio))
+  # while len(heap2):
+  #   u, wi = heappop(heap2)
+  #   for v in G[u]:
+  #     acumulado, n = G[u][v]
+  #     promedio = acumulado//n
+  #     if wi + promedio < distance2[v]:
+  #       distance2[v] = wi + promedio
+  #       heappush(heap2, (v, wi + promedio))
+  # print(distance1["bargainhunterrr17"], distance2["bargainhunterrr17"])
+  
   last = ""
   for source in centros:
     heap = [(source, 0)]
@@ -75,6 +102,7 @@ def thiessen(tree):
                 centros[last].remove(v)
             centros[source].add(v)
         elif wi + promedio == distance[v]:
+          heappush(heap, (v, wi + promedio))
           if v not in centros:
             if last != "":
               if v in centros[last] and last > source:
@@ -82,10 +110,11 @@ def thiessen(tree):
                 centros[source].add(v)
     last = source
   
+  # print(distance1["_Person_"], distance2["_Person_"])
   for centro in centros:
     print(centro, end=" ")
     print(*centros[centro], end=" ")
     stop = len(centros[centro])
     for vertice in centros[centro]:
       print(distance[vertice], end=" ")
-    print()
+    print("\n")
