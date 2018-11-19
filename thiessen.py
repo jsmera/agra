@@ -70,14 +70,13 @@ def thiessen(tree):
         acumulado, n = G[u][v]
         promedio = acumulado//n
         last = usuario[v]
-        for w in centros:
-          if v in centros[w]: last = w
         if wi + promedio < distance[v]:
           distance[v] = wi + promedio
           heappush(heap, (v, wi + promedio))
           if v not in centros:
             if last != "": centros[last].remove(v)
             centros[source].add(v)
+            usuario[v] = source
         elif wi + promedio == distance[v]:
           heappush(heap, (v, wi + promedio))
           if v not in centros:
@@ -85,6 +84,7 @@ def thiessen(tree):
               if v in centros[last] and last > source:
                 centros[last].remove(v)
                 centros[source].add(v)
+                usuario[v] = source
 
   for centro in centros:
     print(centro, end=" ")
